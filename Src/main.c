@@ -58,6 +58,9 @@
 #define redLedPin		14
 #define greenLedPin		13
 #define blueButtonPin 	0
+#define	ARR_ONE_PERIOD 125
+#define ARR_Low_Period 12
+uint16_t timeWaveform[] = {ARR_Low_Period,ARR_ONE_PERIOD,ARR_Low_Period,ARR_ONE_PERIOD,ARR_ONE_PERIOD+2};
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -169,10 +172,15 @@ int main(void)
  		  //enableDMA(DMA2_DEV);
  		  //DmainitForUsart1("\nHello World!\n");
    	   	  enableTimer8();
+   	   	  enableDMAforTimer8();
    	   	  initTimer8Channel1();
+   	   	  forceOutCompareChannel1High();
    	   	  enableDMA(DMA2_DEV);
    	   	  DmainitForTimer8();
+   	   	  DmasetAddressesAndSize((char *)timeWaveform,&(Timer8->CCR1),2);
+   	   	  while(1){
 
+   	   	  }
 
  		  /*enableGpioA();
  		  enableGpioG();
@@ -191,8 +199,9 @@ int main(void)
  		  USARTTransmit();
  		  USARTConfigReceive();*/
 
- 		  char *data = (char *)malloc(sizeof(char)*256);
- 		  int num;
+
+ 		  //char *data = (char *)malloc(sizeof(char)*256);
+ 		  //int num;
  		 //serialPrint("%s","Hello world!");
   while (1)
   {

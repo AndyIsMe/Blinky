@@ -66,6 +66,28 @@ void initTimer8Channel1()
 
 }
 
+void _initTimer8Channel1(){
+	//Configure timer 8 Channel 1 pin (PC6) -- Enable Port C , set pin as AltFunc3 Out-PP
+	*rccAhb1Rst &= ~(1<<2);
+	//Start clock of GPIOC
+	*rccAhb1En |= 1<<2;
+	gpioConfigAltFuncNum(GpioC,6,ALT_FUNC3);
+	gpioConfig(GpioC,6, GPIO_MODE_AF , GPIO_PUSH_PULL , GPIO_NO_PULL , GPIO_VHI_SPEED);
+	forceOutCompareChannel1High();
+	timeSelectChn1AsOC();
+	Timer8->CCER |= ActiveHighPolarity | CaptureEN;
+	toggleOutCompareChannel1();
+	Timer8->ARR = 125;
+	Timer8->CCR1 = Timer8->ARR;
+	Timer8->CNT = (Timer8->ARR) - 1;
+	Timer8->CR1 |= CENEN;
+
+}
+
+void enableDMAforTimer8(){
+	Timer8->DIER |= CC1DE;
+}
+
 void initTimer8Channel3(){
 	//Configure timer 8 Channel 3 pin (PC8) -- Enable Port C , set pin as AltFunc3 Out-PP
 	*rccAhb1Rst &= ~(1<<2);

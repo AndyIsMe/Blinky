@@ -58,7 +58,8 @@ struct DmaReg {
 #define FIFO_QUARTER 		0
 #define FIFO_HALF 			1
 #define FIFO_THREE_QUARTER 	(1<<1)
-#define FIFO_FULL 			(3<<1)
+#define FIFO_FULL 			3
+#define DIRECT_DIS			(1<<2)
 
 //SxCr register
 #define StreamEN	1
@@ -89,7 +90,7 @@ struct DmaReg {
 #define channel_4	(1<<27)
 #define channel_5	(5<<27)
 #define channel_6	(6<<27)
-#define channel_7	(7<<27)
+#define channel_7	(7<<25)
 
 
 //PSIZE
@@ -104,8 +105,8 @@ struct DmaReg {
 
 void DmainitForUsart1(/*char *str*/);
 int dmaStreamCheckFlag(DmaReg *dma , int streamNum , int flag);
-void sendBitPattern(uint8_t data);
 void DmainitForTimer8(/*char *str*/);
+void DmasetAddressesAndSize(uint32_t memory , uint32_t peripheralAddr , uint32_t size);
 
 //dma1->LIFCR = ?;
 //dma1->S[4].M0AR = ?;

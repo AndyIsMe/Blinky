@@ -63,30 +63,24 @@ void DmainitForTimer8(/*char *str*/){
 	//char *str = "hello";
 
 	dma2->S[2].CR &= ~(StreamEN);
-	dma2->S[2].CR = DMAFlowControl | MemoryPointerIn | PSIZE_WORD | MSIZE_word | VHPrio | channel_7 | MBURST_INCR4 |MINC_EN;
-	dma2->S[2].FCR = FIFO_HALF;
+	dma2->S[2].CR = DMAFlowControl | MemoryPointerIn | PSIZE_HALFWORD | MSIZE_halfword | VHPrio | channel_7 | MBURST_INCR4 |MINC_EN;
+	dma2->S[2].FCR = DIRECT_DIS | FIFO_FULL;
 	dma2->S[2].CR |= Memory_To_Peripheral;
-	dma2->S[7].CR &= ~(StreamEN);
-	dma2->S[7].CR = DMAFlowControl | MemoryPointerIn | PSIZE_WORD | MSIZE_word | VHPrio | channel_7 | MBURST_INCR4 | MINC_EN;
-	dma2->S[7].FCR = FIFO_HALF;
-	dma2->S[7].CR |= Memory_To_Peripheral;
-	dma2->S[2].PAR = &(Timer8->DCR);
-	dma2->S[7].PAR = &(Timer8->DCR);
+	//dma2->S[7].CR &= ~(StreamEN);
+	//dma2->S[7].CR = DMAFlowControl | MemoryPointerIn | PSIZE_HALFWORD | MSIZE_halfword | VHPrio | channel_7 | MBURST_INCR4 | MINC_EN;
+	//dma2->S[7].FCR = FIFO_HALF;
+	//dma2->S[7].CR |= Memory_To_Peripheral;
+	//dma2->S[2].PAR = &(Timer8->DCR);
+	//dma2->S[7].PAR = &(Timer8->DCR);
 
 	//dma2->S[2].M0AR = str;
 	//dma2->S[7].M0AR = str;
 	//binary 10101101
-	sendBitPattern(163);
 
-	dma2->S[7].NDTR = 13;
+	//dma2->S[7].NDTR = 13;
 
-	dma2->S[2].CR |= StreamEN;
-	dma2->S[7].CR |= StreamEN;
-}
-
-void sendBitPattern(uint8_t data){
-	dma2->S[2].M0AR = data;
-	dma2->S[7].M0AR = data;
+	//dma2->S[2].CR |= StreamEN;
+	//dma2->S[7].CR |= StreamEN;
 }
 
 
@@ -108,6 +102,9 @@ int dmaStreamCheckFlag(DmaReg *dma , int streamNum , int flag){
 
 
 void DmasetAddressesAndSize(uint32_t memory , uint32_t peripheralAddr , uint32_t size){
-
+	dma2->S[2].PAR = peripheralAddr;
+	dma2->S[2].M0AR = memory;
+	dma2->S[2].NDTR = size;
+	dma2->S[2].CR |= StreamEN;
 }
 

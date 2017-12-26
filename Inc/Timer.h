@@ -49,7 +49,10 @@
 #define PWM_1				(6<<4)
 #define PWM_2				(7<<4)
 
+#define CENEN				1
+
 #define MOEEN	(1<<15)
+#define CC1DE	(1<<9)
 
 //CCER Register
 #define CaptureEN							1
