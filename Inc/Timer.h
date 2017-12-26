@@ -117,5 +117,6 @@ void initTimer8Channel1();
 void forceOutCompareChannel1High();
 void forceOutCompareChannel1Low();
 void toggleOutCompareChannel1();
+void _initTimer8Channel1();
 
 #endif /* TIMER_H_ */

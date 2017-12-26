@@ -60,6 +60,7 @@ struct DmaReg {
 #define FIFO_THREE_QUARTER 	(1<<1)
 #define FIFO_FULL 			3
 #define DIRECT_DIS			(1<<2)
+#define DIRECT_EN			(0<<2)
 
 //SxCr register
 #define StreamEN	1
@@ -94,14 +95,14 @@ struct DmaReg {
 
 
 //PSIZE
-#define PSIZE_ONEBYTE	(0<<12)
-#define PSIZE_HALFWORD	(1<<12)
-#define PSIZE_WORD		(2<<12)
+#define PSIZE_ONEBYTE	(0<<11)
+#define PSIZE_HALFWORD	(1<<11)
+#define PSIZE_WORD		(2<<11)
 
 //MSIZE
-#define MSIZE_onebyte		(0<<14)
-#define MSIZE_halfword	(1<<14)
-#define MSIZE_word		(2<<14)
+#define MSIZE_onebyte	(0<<13)
+#define MSIZE_halfword	(1<<13)
+#define MSIZE_word		(2<<13)
 
 void DmainitForUsart1(/*char *str*/);
 int dmaStreamCheckFlag(DmaReg *dma , int streamNum , int flag);

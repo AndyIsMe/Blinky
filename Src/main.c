@@ -53,14 +53,16 @@
 #include "Nvic.h"
 #include "EXTI.h"
 #include <stm32f4xx.h>
+#include <string.h>
 
 /* USER CODE BEGIN Includes */
 #define redLedPin		14
 #define greenLedPin		13
 #define blueButtonPin 	0
 #define	ARR_ONE_PERIOD 125
-#define ARR_Low_Period 12
-uint16_t timeWaveform[] = {ARR_Low_Period,ARR_ONE_PERIOD,ARR_Low_Period,ARR_ONE_PERIOD,ARR_ONE_PERIOD+2};
+#define ARR_Low_Period0 12
+#define ARR_Low_Period1 114
+uint16_t timeWaveform[] = {ARR_Low_Period0,ARR_ONE_PERIOD,ARR_Low_Period1,ARR_ONE_PERIOD,ARR_ONE_PERIOD+2};
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -173,11 +175,11 @@ int main(void)
  		  //DmainitForUsart1("\nHello World!\n");
    	   	  enableTimer8();
    	   	  enableDMAforTimer8();
-   	   	  initTimer8Channel1();
+   	   	  _initTimer8Channel1();
    	   	  forceOutCompareChannel1High();
    	   	  enableDMA(DMA2_DEV);
    	   	  DmainitForTimer8();
-   	   	  DmasetAddressesAndSize((char *)timeWaveform,&(Timer8->CCR1),2);
+   	   	  DmasetAddressesAndSize((char *)timeWaveform,&(Timer8->CCR1),strlen(timeWaveform));
    	   	  while(1){
 
    	   	  }
