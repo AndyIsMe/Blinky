@@ -52,6 +52,8 @@
 #include "SysCfg.h"
 #include "Nvic.h"
 #include "EXTI.h"
+#include "ADC.h"
+#include "IWDG.h"
 #include <stm32f4xx.h>
 #include <string.h>
 
@@ -75,7 +77,9 @@ uint16_t timeWaveform[] = {ARR_Low_Period0,ARR_ONE_PERIOD,ARR_Low_Period1,ARR_ON
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-
+extern void initialise_monitor_handles(void);
+void PrintCauseOfReset(void);
+void wwdgWaitFor500msec(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
@@ -90,7 +94,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	volatile int i=0;
-	//initialise_monitor_handles();
+	initialise_monitor_handles();
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -173,17 +177,26 @@ int main(void)
  		  //enableDMA(DMA1_DEV);
  		  //enableDMA(DMA2_DEV);
  		  //DmainitForUsart1("\nHello World!\n");
-   	   	  enableTimer8();
+   	   	  //enableADC();
+   	   	  //gpioConfig(GpioA,5, GPIO_MODE_ANA , GPIO_PUSH_PULL , GPIO_NO_PULL , GPIO_VHI_SPEED);
+   	   	  //gpioConfig(GpioC,3, GPIO_MODE_ANA , GPIO_PUSH_PULL , GPIO_NO_PULL , GPIO_VHI_SPEED);
+   	   	  //SingleConvConfig(5);
+   	   	  DoubleConvConfig(5,3);
+   	   	  /*enableTimer8();
    	   	  enableDMAforTimer8();
    	   	  _initTimer8Channel1();
    	   	  forceOutCompareChannel1High();
    	   	  enableDMA(DMA2_DEV);
    	   	  DmainitForTimer8();
-   	   	  DmasetAddressesAndSize((char *)timeWaveform,&(Timer8->CCR1),strlen(timeWaveform));
+   	   	  DmasetAddressesAndSize((char *)timeWaveform,&(Timer8->CCR1),strlen(timeWaveform));*/
+   	   	  /*
    	   	  while(1){
+	   		  int ana = adc1->DR;
+	   		float voltage = ((3.3*ana)/4096);
 
-   	   	  }
-
+   	   	printf("%f\n",voltage);
+   	   	  }*/
+   	   	  //IWDGConfig();
  		  /*enableGpioA();
  		  enableGpioG();
  		  gpioConfig(GpioA,9,GPIO_MODE_AF,GPIO_PUSH_PULL,GPIO_PULL_UP,GPIO_VHI_SPEED);
@@ -205,8 +218,48 @@ int main(void)
  		  //char *data = (char *)malloc(sizeof(char)*256);
  		  //int num;
  		 //serialPrint("%s","Hello world!");
+
+   	   	  enableGpioG();
+   	   	  gpioConfig(GpioG,redLedPin, GPIO_MODE_OUT, GPIO_PUSH_PULL, GPIO_NO_PULL, GPIO_HI_SPEED);
+   	   	  PrintCauseOfReset();
+   	   	  Rcc->CSR |= RCC_RMVF;
+   	   	  enableWWDG();
+
+
+   	   	  //HAL_Delay(1000);
+   	   	  /*StartIWDG();
+   	   	  IWDGConfig();
+   	   	  TicksInput(FOUR_SEC_IN_Div_64);
+   		  while(iwdgPVUIsEmpty()==1);
+   		  IWDGPreScale();
+   		  while(iwdgRVUIsEmpty()==1);
+   		  IWDGReset();*/
+
+   		  /*while(i++<20){
+   			  gpioWrite(GpioG,redLedPin,1);
+   			  HAL_Delay(50);
+   			  gpioWrite(GpioG,redLedPin,0);
+   			  HAL_Delay(50);
+
+   		  }*/
+
+
+
+
   while (1)
   {
+			wwdgWaitFor500msec();
+			gpioWrite(GpioG,redLedPin,1);
+			wwdgWaitFor500msec();
+			gpioWrite(GpioG,redLedPin,0);
+	  	  //HAL_Delay(7);
+  	      //WWDGConfig(63);
+	  	//WWDGConfig(63);
+	  // Just waiting for core reset to happen
+	  //IWDGReset();
+
+
+
 	  //toggleOutCompareChannel1();
 	  //toggleOutCompareChannel1WithForce();
 
@@ -357,6 +410,40 @@ void My_SysTick_Handler(void){
 
 void HASH_RNG_IRQHandler(void){
 	volatile int rand = Rng->DR;
+}
+
+void PrintCauseOfReset(void)
+{
+	printf("Cause of Reset\n");
+	if(Rcc->CSR & RCC_LPWRRSTF)
+		printf("Low Power Reset\n");
+	if(Rcc->CSR & RCC_WWDGRSTF)
+		printf("Window Watchdog Reset\n");
+	if(Rcc->CSR & RCC_IWDGRSTF)
+		printf("Independent Watchdog Reset\n");
+	if(Rcc->CSR & RCC_SFTRSTF)
+		printf("Software Reset\n");
+	if(Rcc->CSR & RCC_PORRSTF)
+		printf("Power On Reset\n");
+	if(Rcc->CSR & RCC_PINRSTF)
+		printf("Nsrt PIN Reset\n");
+	if(Rcc->CSR & RCC_BORRSTF)
+		printf("Brownout Reset\n");
+
+}
+
+void wwdgWaitFor500msec(){
+	int i = 0;
+	wwdgSetWindowValue(55);
+	WWDGConfig(55);
+	ClearwwdgInterrupt();
+	while(i++ <50){
+		while(!(wwdg->SR & EWIF));
+			WWDGConfig(55);
+			ClearwwdgInterrupt();
+
+	}
+
 }
 /* USER CODE END 4 */
 

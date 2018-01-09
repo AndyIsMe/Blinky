@@ -31,7 +31,9 @@ Src/main.o: ../Src/main.c C:/Students/Poh/Blinky/Inc/main.h \
  C:/Students/Poh/Blinky/Inc/Rcc.h C:/Students/Poh/Blinky/Inc/Rng.h \
  C:/Students/Poh/Blinky/Inc/Timer.h C:/Students/Poh/Blinky/Inc/USART.h \
  C:/Students/Poh/Blinky/Inc/SysTick.h C:/Students/Poh/Blinky/Inc/SysCfg.h \
- C:/Students/Poh/Blinky/Inc/Nvic.h C:/Students/Poh/Blinky/Inc/EXTI.h
+ C:/Students/Poh/Blinky/Inc/Nvic.h C:/Students/Poh/Blinky/Inc/EXTI.h \
+ C:/Students/Poh/Blinky/Inc/ADC.h C:/Students/Poh/Blinky/Inc/GPIO.h \
+ C:/Students/Poh/Blinky/Inc/IWDG.h
 
 C:/Students/Poh/Blinky/Inc/main.h:
 
@@ -116,3 +118,9 @@ C:/Students/Poh/Blinky/Inc/SysCfg.h:
 C:/Students/Poh/Blinky/Inc/Nvic.h:
 
 C:/Students/Poh/Blinky/Inc/EXTI.h:
+
+C:/Students/Poh/Blinky/Inc/ADC.h:
+
+C:/Students/Poh/Blinky/Inc/GPIO.h:
+
+C:/Students/Poh/Blinky/Inc/IWDG.h:

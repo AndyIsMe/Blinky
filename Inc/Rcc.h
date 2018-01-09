@@ -78,6 +78,18 @@ struct RccReg {
 		Rcc->CFGR |= (x) << 24;			\
 	}while(0)
 
+//Control & Status Register(CSR)
+#define RCC_LPWRRSTF	(1<<31)
+#define RCC_WWDGRSTF	(1<<30)
+#define RCC_IWDGRSTF	(1<<29)
+#define RCC_SFTRSTF		(1<<28)
+#define RCC_PORRSTF		(1<<27)
+#define RCC_PINRSTF		(1<<26)
+#define RCC_BORRSTF		(1<<25)
+#define RCC_RMVF		(1<<24)
+
+
+
 //Export variables to other modules
 extern uint32_t *rccAhb1Rst;
 extern uint32_t *rccAhb1En;
@@ -89,5 +101,7 @@ void enableRng(void);
 void enableI2C(int number);
 void enableUSART1(void);
 void enableDMA(int dmaNumber);
+void enableADC(void/*int ADCNumber*/);
+void enableWWDG(void);
 
 #endif /* RCC_H_ */

@@ -73,4 +73,16 @@ void enableDMA(int dmaNumber){
 	Rcc->AHB1ENR |= 1 << (21 + dmaNumber);
 }
 
+void enableADC(void/*int ADCNumber*/){
+	//Unreset ADC
+	Rcc->APB2RSTR &= ~(1<<8);
+	//Start clock of ADC
+	Rcc->APB2ENR |= (1<<8);
+}
 
+void enableWWDG(void)
+{
+	Rcc->APB1RSTR &= ~(1<<11);
+
+	Rcc->APB1ENR |= (1<<11);
+}
